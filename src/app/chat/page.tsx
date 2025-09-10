@@ -207,7 +207,7 @@ export default function ChatPage() {
               <div className="text-center space-y-6 max-w-4xl">
                 <div className="text-4xl mb-4">👋</div>
                 <h1 className="text-2xl font-semibold" style={{ color: 'var(--accent)' }}>
-                  {getGreeting()}, {session?.user?.name || 'there'}!
+                  {getGreeting()}
                 </h1>
                 <p className="text-gray-600 max-w-md mx-auto">
                   {siteConfig.chat.welcomeMessage}
