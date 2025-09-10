@@ -132,6 +132,33 @@ async function handleRequest(request: Request): Promise<Response> {
 
   try {
     console.log('Processing request in try block')
+    
+    // Token authentication endpoint
+    if (path === '/auth' && method === 'POST') {
+      console.log('Auth endpoint hit')
+
+      const body = await parseJsonBody(request) as { AccessToken?: string; Timestamp?: string } | null
+      console.log('Auth request body:', body)
+      
+      if (!body || !body.AccessToken || !body.Timestamp) {
+        console.log('Auth validation failed: missing AccessToken or Timestamp')
+        return errorResponse('AccessToken and Timestamp are required', 400)
+      }
+
+      // Validate the access token (simple validation for demo)
+      if (body.AccessToken === 'abcdefghijk') {
+        console.log('Valid access token provided')
+        return jsonResponse({
+          UserID: 'mock-user-1',
+          Email: 'user@mock.com',
+          Name: 'Mock User'
+        })
+      } else {
+        console.log('Invalid access token:', body.AccessToken)
+        return errorResponse('Invalid access token', 401)
+      }
+    }
+    
     // Chat inference endpoint
     console.log('Checking path:', path, 'method:', method)
     if (path === '/chat/inference' && method === 'POST') {
@@ -366,6 +393,7 @@ async function handleRequest(request: Request): Promise<Response> {
 console.log(`🚀 Starting mock server on port ${PORT}`)
 console.log(`📊 SQLite database: chatbot.db`)
 console.log(`🔗 API endpoints:`)
+console.log(`   POST /auth`)
 console.log(`   POST /chat/inference`)
 console.log(`   GET  /conversations`)
 console.log(`   PUT  /conversations/:id/pin`)
