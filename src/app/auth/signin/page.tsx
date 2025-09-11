@@ -90,10 +90,10 @@ export default function SignIn() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Sign in with your access token to continue
-            <br />
+            {/* <br />
             <span className="text-xs text-gray-500 mt-1 block">
               Demo token: &quot;abcdefghijk&quot;
-            </span>
+            </span> */}
           </p>
         </div>
 
