@@ -404,6 +404,7 @@ export default function ConversationPage() {
               />
               <MessagesList messages={messages} />
               <StreamingMessage streamingMessage={streamingMessage} />
+              <div className='w-full md:h-20'></div>
             </>
           )}
           {isLoading && !streamingMessage && <LoadingMessage />}
