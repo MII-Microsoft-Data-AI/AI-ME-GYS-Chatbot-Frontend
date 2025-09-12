@@ -2,6 +2,25 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import { getServerSession } from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 
+export interface AuthResponse {
+  code: number
+  source: string
+  message: string
+  data: Data
+  expired_at: string
+}
+
+export interface Data {
+  user: User
+}
+
+export interface User {
+  users_id: string
+  users_name: string
+  users_email: string
+}
+
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -23,17 +42,16 @@ export const authOptions: NextAuthOptions = {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              AccessToken: credentials.accessToken,
-              Timestamp: new Date().toISOString()
+              access_token: credentials.accessToken,
             })
           })
 
           if (response.ok) {
-            const userData = await response.json()
+            const resData = await response.json() as AuthResponse
             return {
-              id: userData.UserID,
-              email: userData.Email,
-              name: userData.Name,
+              id: resData.data.user.users_id,
+              email: resData.data.user.users_email,
+              name: resData.data.user.users_name,
             }
           } else {
             console.error('Authentication failed:', response.status, response.statusText)

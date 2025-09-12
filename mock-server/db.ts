@@ -15,6 +15,7 @@ interface Chat {
 interface Conversation {
   id: string
   title: string
+  user_id: string
   created_at: number
   updated_at: number
   is_pinned: boolean
@@ -60,13 +61,14 @@ loadDatabase()
 // Database operations
 export const statements = {
   // Conversations
-  createConversation: (id: string, title: string, created_at: number, updated_at: number, is_pinned: boolean) => {
-    db.conversations.push({ id, title, created_at, updated_at, is_pinned })
+  createConversation: (id: string, title: string, created_at: number, updated_at: number, is_pinned: boolean, user_id: string) => {
+    db.conversations.push({ id, title, created_at, updated_at, is_pinned, user_id })
     saveDatabase()
   },
 
-  getConversations: () => {
+  getConversations: (user_id: string) => {
     return db.conversations
+      .filter(conv => conv.user_id === user_id)
       .sort((a, b) => {
         if (a.is_pinned !== b.is_pinned) {
           return a.is_pinned ? -1 : 1
@@ -90,7 +92,11 @@ export const statements = {
     }
   },
 
-  deleteConversation: (id: string) => {
+  deleteConversation: (id: string, user_id: string) => {
+    const conversation = db.conversations.find(conv => conv.id === id && conv.user_id === user_id)
+    if (!conversation) {
+      throw new Error('Conversation not found or access denied')
+    }
     db.conversations = db.conversations.filter(conv => conv.id !== id)
     db.chats = db.chats.filter(chat => chat.conversation_id !== id)
     saveDatabase()
