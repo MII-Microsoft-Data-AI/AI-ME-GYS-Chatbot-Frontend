@@ -13,37 +13,47 @@ export default function SignIn() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const siteConfig = getSiteConfig()
+  const [CurrenTime, setCurrenTime] = useState<null | Date>(null)
 
   // Check for accessToken in query parameters on component mount
   useEffect(() => {
-    const tokenFromQuery = searchParams.get('accessToken')
-    if (tokenFromQuery) {
-      setAccessToken(tokenFromQuery)
-      // Auto sign in with token from query parameter
-      ;(async () => {
-        setIsLoading(true)
-        setError("")
+    const loginTimeout = setTimeout(() => {
+      const tokenFromQuery = searchParams.get('accessToken')
+      console.log("Access Token from Query:", tokenFromQuery)
+      if (tokenFromQuery) {
+        setAccessToken(tokenFromQuery)
+          // Auto sign in with token from query parameter
+          ; (async () => {
+            setIsLoading(true)
+            setError("")
 
-        try {
-          const result = await signIn('token', {
-            accessToken: tokenFromQuery,
-            redirect: false,
-          })
+            try {
+              const result = await signIn('token', {
+                accessToken: tokenFromQuery,
+                redirect: false,
+              })
 
-          if (result?.error) {
-            setError("Invalid access token")
-          } else {
-            router.push('/chat')
-          }
-        } catch (err) {
-          console.error('Sign in error:', err)
-          setError("An error occurred. Please try again.")
-        } finally {
-          setIsLoading(false)
-        }
-      })()
-    }
-  }, [searchParams, router])
+              if (result?.error) {
+                setError("Invalid access token")
+                router.replace(siteConfig.gysPortalUrl)
+              } else {
+                router.replace("/chat")
+              }
+            } catch (err) {
+              router.replace(siteConfig.gysPortalUrl)
+              console.error('Sign in error:', err)
+              setError("An error occurred. Please try again.")
+            } finally {
+              setIsLoading(false)
+            }
+          })()
+      } else {
+        router.replace(siteConfig.gysPortalUrl)
+      }
+    }, 1000)
+
+    return () => clearTimeout(loginTimeout)
+  }, [searchParams])
 
   const handleTokenSignIn = async () => {
     if (!accessToken) {
@@ -89,7 +99,7 @@ export default function SignIn() {
             Welcome to {siteConfig.title}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in with your access token to continue
+            Please wait while we verifying your access
             {/* <br />
             <span className="text-xs text-gray-500 mt-1 block">
               Demo token: &quot;abcdefghijk&quot;
@@ -97,7 +107,7 @@ export default function SignIn() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        {/* <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="accessToken" className="sr-only">
               Access Token
@@ -141,7 +151,7 @@ export default function SignIn() {
               {isLoading ? 'Signing in...' : 'Sign in with Token'}
             </button>
           </div>
-        </form>
+        </form> */}
       </div>
     </div>
   )
