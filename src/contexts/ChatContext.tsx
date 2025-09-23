@@ -244,6 +244,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
         createdAt: conv.created_at,
         isPinned: conv.is_pinned
       }))
+      // setChatHistory(MockChatHistory)
       setChatHistory(conversations)
     } catch (err) {
       setError('Failed to load conversations')

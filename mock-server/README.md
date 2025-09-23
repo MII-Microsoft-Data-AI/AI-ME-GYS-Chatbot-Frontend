@@ -49,7 +49,7 @@ c:Hello! c:I'm c:doing c:great, c:thank c:you c:for c:asking!
 
 ### Conversations
 ```http
-GET /conversations
+GET /conversations?user_id=12345
 # Returns list of all conversations
 
 PUT /conversations/{id}/pin
