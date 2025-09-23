@@ -51,16 +51,16 @@ export interface NavigationItem {
 
 // Default configuration - Customize these values to change your site branding
 export const siteConfig: SiteConfig = {
-  gysPortalUrl: "https://www.garudayamatosteel.com/",
-  name: "SMBCI Chat",
-  title: "SMBCI Chat",
-  description: "A ChatGPT-like interface built with Next.js and NextAuth",
-  url: "https://chatgpt-clone.com", // Update with your actual domain
+  gysPortalUrl: process.env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://www.garudayamatosteel.com",
+  name: "GYS Chat",
+  title: "GYS Chat",
+  description: "Garuda Yamato Steel - An AI powered chat assistant",
+  url: process.env.NEXTAUTH_URL || "http://localhost:3000", // Update with your actual domain
   keywords: ["chatgpt", "ai", "artificial intelligence", "chat", "assistant", "nextjs", "react"],
   favicon: "https://www.garudayamatosteel.com/wp-content/uploads/2024/06/cropped-GYS-Favicon-1-32x32.png",
   logo: {
-    src: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Logo_SMBC-Indonesia.svg", // Change this to your logo path
-    alt: "ChatGPT Clone Logo",
+    src: "https://www.garudayamatosteel.com/wp-content/uploads/2024/05/GYS-Logo-Header-1.webp", // Change this to your logo path
+    alt: "GYS Logo",
     width: 118,
     height: 24
   },
