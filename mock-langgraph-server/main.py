@@ -335,6 +335,30 @@ def pin_conversation(_: Annotated[str, Depends(get_authenticated_user)], userid:
     action = "pinned" if updated else "unpinned"
     return {"message": f"Conversation {action} successfully"}
 
+class VerifyTokenRequest(BaseModel):
+    access_token: str
+
+@app.post("/auth")
+def authenticate(request: VerifyTokenRequest):
+    """Simple authentication endpoint."""
+    token = request.access_token
+    if not token:
+        raise HTTPException(status_code=400, detail="Missing access_token in request body")
+    
+    if token == os.getenv("ACCESS_TOKEN"):
+        return{ 
+          'code': 200,
+          'data': { 
+            'user': { 
+              'users_email': 'mockuser@gyssteel.com',
+              'users_id': '$2y$12$82Kya1aakS8zguQtOEKDMuKm1FGDan/6znaEa0X/y2w6bYxvJZ8u',
+              'users_name': 'Mock User'
+            }
+          },
+          'expired_at': '2025-09-11 11:53:28.640',
+          'message': 'Token is valid.',
+          'source': 'Token Validation'}
+
 if __name__ == "__main__":
     import uvicorn
     
