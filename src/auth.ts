@@ -1,46 +1,66 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import { getServerSession } from "next-auth/next"
-import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
+
+export interface AuthResponse {
+  code: number
+  source: string
+  message: string
+  data: Data
+  expired_at: string
+}
+
+export interface Data {
+  user: User
+}
+
+export interface User {
+  users_id: string
+  users_name: string
+  users_email: string
+}
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
-      name: "credentials",
+      id: "token",
+      name: "Token Authentication",
       credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" }
+        accessToken: { label: "Access Token", type: "text" }
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
+        if (!credentials?.accessToken) {
           return null
         }
 
-        // Mock user credentials
-        if (credentials.username === "user" && credentials.password === "pass") {
-          return {
-            id: "mock-user-1",
-            email: "user@example.com",
-            name: "User",
-            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
-          }
-        }
+        try {
+          // Call the backend /auth endpoint
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              access_token: credentials.accessToken,
+            })
+          })
 
-        // For demo purposes, also accept any email with password "password"
-        // In a real app, you would validate against your database
-        if (credentials.password === "password") {
-          return {
-            id: "1",
-            email: credentials.username as string,
-            name: (credentials.username as string).split("@")[0],
+          if (response.ok) {
+            const resData = await response.json() as AuthResponse
+            return {
+              id: resData.data.user.users_id,
+              email: resData.data.user.users_email,
+              name: resData.data.user.users_name,
+            }
+          } else {
+            console.error('Authentication failed:', response.status, response.statusText)
+            return null
           }
+        } catch (error) {
+          console.error('Authentication error:', error)
+          return null
         }
-
-        return null
       },
     }),
   ],

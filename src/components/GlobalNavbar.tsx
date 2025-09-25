@@ -327,7 +327,7 @@ export default function GlobalNavbar({ user }: GlobalNavbarProps) {
 
             {/* Menu Button */}
             <div className="flex-shrink-0 px-4 pb-4">
-              <MenuButton isCollapsed={false} />
+              {/* <MenuButton isCollapsed={false} /> */}
             </div>
 
             {/* User Profile Section */}
@@ -462,7 +462,7 @@ export default function GlobalNavbar({ user }: GlobalNavbarProps) {
         {/* Menu Button */}
         <div className="flex-shrink-0 p-4 border-t border-gray-300 sticky bottom-0" style={{ backgroundColor: 'var(--sidebar-bg)' }}>
           <div className="flex-shrink-0 pb-4">
-            <MenuButton isCollapsed={isCollapsed} />
+            {/* <MenuButton isCollapsed={isCollapsed} /> */}
           </div>
           <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
             <div className="flex items-center space-x-3">

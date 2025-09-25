@@ -27,6 +27,40 @@ Hello! I'm here to help you with **${getRandomTopic()}**. Here's what I can assi
 
 Would you like me to help you with anything specific?`,
 
+  `## Visual Guide: ${getRandomTopic()}
+
+Here's a helpful diagram to illustrate the concept:
+
+![Architecture Diagram](https://via.placeholder.com/600x400/0066cc/ffffff?text=System+Architecture)
+
+### Key Components
+
+The image above shows the main components of our system:
+
+1. **User Interface** - The frontend where users interact
+2. **API Gateway** - Routes requests to appropriate services  
+3. **Business Logic** - Core processing and validation
+4. **Database** - Persistent data storage
+
+You can also include images from your local assets:
+
+![Local Example](/next.svg)
+
+> **Tip:** Images help visualize complex concepts and make documentation more engaging!
+
+For more technical diagrams, you might want to use:
+
+\`\`\`mermaid
+graph TD
+    A[User Request] --> B[API Gateway]
+    B --> C[Authentication]
+    C --> D[Business Logic]
+    D --> E[Database]
+    E --> F[Response]
+\`\`\`
+
+This creates a nice flow diagram showing the request lifecycle.`,
+
   `## Understanding ${getRandomTopic()}
 
 Let me break this down for you step by step:

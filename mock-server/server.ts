@@ -132,6 +132,40 @@ async function handleRequest(request: Request): Promise<Response> {
 
   try {
     console.log('Processing request in try block')
+    
+    // Token authentication endpoint
+    if (path === '/auth' && method === 'POST') {
+      console.log('Auth endpoint hit')
+
+      const body = await parseJsonBody(request) as { access_token?: string } | null
+      console.log('Auth request body:', body)
+      
+      if (!body || !body.access_token ) {
+        console.log('Auth validation failed: missing AccessToken or Timestamp')
+        return errorResponse('AccessToken and Timestamp are required', 400)
+      }
+
+      // Validate the access token (simple validation for demo)
+      if (body.access_token === 'abcdefghijk') {
+        console.log('Valid access token provided')
+        return jsonResponse({ 
+          'code': 200,
+          'data': { 
+            'user': { 
+              'users_email': 'mockuser@gyssteel.com',
+              'users_id': '$2y$12$82Kya1aakS8zguQtOEKDMuKm1FGDan/6znaEa0X/y2w6bYxvJZ8u',
+              'users_name': 'Mock User'
+            }
+          },
+          'expired_at': '2025-09-11 11:53:28.640',
+          'message': 'Token is valid.',
+          'source': 'Token Validation'})
+      } else {
+        console.log('Invalid access token:', body.access_token)
+        return errorResponse('Invalid access token', 401)
+      }
+    }
+    
     // Chat inference endpoint
     console.log('Checking path:', path, 'method:', method)
     if (path === '/chat/inference' && method === 'POST') {
@@ -170,7 +204,8 @@ async function handleRequest(request: Request): Promise<Response> {
           title,
           timestamp,
           timestamp,
-          false
+          false,
+          userIdValidation.userId!
         )
       }
 
@@ -256,7 +291,7 @@ async function handleRequest(request: Request): Promise<Response> {
         return errorResponse(userIdValidation.error || 'Bad Request', 400)
       }
 
-      const conversations = statements.getConversations()
+      const conversations = statements.getConversations(userIdValidation.userId!)
       return jsonResponse(conversations)
     }
 
@@ -317,7 +352,7 @@ async function handleRequest(request: Request): Promise<Response> {
         return errorResponse('Conversation not found', 404)
       }
 
-      statements.deleteConversation(conversationId)
+      statements.deleteConversation(conversationId, userIdValidation.userId!)
       return jsonResponse({ success: true, message: 'Conversation deleted successfully' })
     }
 
@@ -366,6 +401,7 @@ async function handleRequest(request: Request): Promise<Response> {
 console.log(`🚀 Starting mock server on port ${PORT}`)
 console.log(`📊 SQLite database: chatbot.db`)
 console.log(`🔗 API endpoints:`)
+console.log(`   POST /auth`)
 console.log(`   POST /chat/inference`)
 console.log(`   GET  /conversations`)
 console.log(`   PUT  /conversations/:id/pin`)

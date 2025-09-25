@@ -1,5 +1,6 @@
 // Site configuration settings
 export interface SiteConfig {
+  gysPortalUrl: string
   name: string
   title: string
   description: string
@@ -50,22 +51,23 @@ export interface NavigationItem {
 
 // Default configuration - Customize these values to change your site branding
 export const siteConfig: SiteConfig = {
-  name: "MII Chat",
-  title: "MII Chat - Your AI Assistant",
-  description: "A ChatGPT-like AI assistant built with Next.js, React, and Assistant-UI. Supported by Mitra Integrasi Infromatika.",
-  url: "https://chatgpt-clone.com", // Update with your actual domain
+  gysPortalUrl: process.env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/",
+  name: "GYS Chat",
+  title: "GYS Chat",
+  description: "Garuda Yamato Steel - An AI powered chat assistant",
+  url: process.env.NEXTAUTH_URL || "http://localhost:3000", // Update with your actual domain
   keywords: ["chatgpt", "ai", "artificial intelligence", "chat", "assistant", "nextjs", "react"],
-  favicon: "https://www.mii.co.id/cfind/source/images/logo.png",
+  favicon: "https://www.garudayamatosteel.com/wp-content/uploads/2024/06/cropped-GYS-Favicon-1-32x32.png",
   logo: {
-    src: "https://www.mii.co.id/cfind/source/images/logo.png", // Change this to your logo path
-    alt: "ChatGPT Clone Logo",
+    src: "https://www.garudayamatosteel.com/wp-content/uploads/2024/05/GYS-Logo-Header-1.webp", // Change this to your logo path
+    alt: "GYS Logo",
     width: 118,
     height: 24
   },
   social: {
-    twitter: "@chatgptclone",
-    github: "https://github.com/your-username/chatgpt-clone",
-    // linkedin: "https://linkedin.com/company/your-company"
+    // twitter: "@chatgptclone",
+    // github: "https://github.com/your-username/chatgpt-clone",
+    linkedin: "https://www.linkedin.com/company/pt-garuda-yamato-steel/"
   },
   navigation: {
     sidebar: [
@@ -82,32 +84,32 @@ export const siteConfig: SiteConfig = {
         showInMenu: true,
         order: 1
       },
-      {
-        id: 'resource-management',
-        label: 'Resource Management',
-        path: '/resource-management',
-        icon: {
-          name: 'folder',
-          svg: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
-        },
-        description: 'Manage your resources and files',
-        showInSidebar: false,
-        showInMenu: true,
-        order: 2
-      },
-      {
-        id: 'settings',
-        label: 'Settings',
-        path: '/settings',
-        icon: {
-          name: 'settings',
-          svg: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
-        },
-        description: 'Configure your preferences',
-        showInSidebar: false,
-        showInMenu: true,
-        order: 3
-      }
+      // {
+      //   id: 'resource-management',
+      //   label: 'Resource Management',
+      //   path: '/resource-management',
+      //   icon: {
+      //     name: 'folder',
+      //     svg: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
+      //   },
+      //   description: 'Manage your resources and files',
+      //   showInSidebar: false,
+      //   showInMenu: true,
+      //   order: 2
+      // },
+      // {
+      //   id: 'settings',
+      //   label: 'Settings',
+      //   path: '/settings',
+      //   icon: {
+      //     name: 'settings',
+      //     svg: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
+      //   },
+      //   description: 'Configure your preferences',
+      //   showInSidebar: false,
+      //   showInMenu: true,
+      //   order: 3
+      // }
     ],
     menu: [
       {
@@ -123,51 +125,47 @@ export const siteConfig: SiteConfig = {
         showInMenu: true,
         order: 1
       },
-      {
-        id: 'resource-management',
-        label: 'Resource Management',
-        path: '/resource-management',
-        icon: {
-          name: 'folder',
-          svg: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
-        },
-        description: 'Manage your resources and files',
-        showInSidebar: false,
-        showInMenu: true,
-        order: 2
-      },
-      {
-        id: 'settings',
-        label: 'Settings',
-        path: '/settings',
-        icon: {
-          name: 'settings',
-          svg: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
-        },
-        description: 'Configure your preferences',
-        showInSidebar: false,
-        showInMenu: true,
-        order: 3
-      }
+      // {
+      //   id: 'resource-management',
+      //   label: 'Resource Management',
+      //   path: '/resource-management',
+      //   icon: {
+      //     name: 'folder',
+      //     svg: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
+      //   },
+      //   description: 'Manage your resources and files',
+      //   showInSidebar: false,
+      //   showInMenu: true,
+      //   order: 2
+      // },
+      // {
+      //   id: 'settings',
+      //   label: 'Settings',
+      //   path: '/settings',
+      //   icon: {
+      //     name: 'settings',
+      //     svg: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
+      //   },
+      //   description: 'Configure your preferences',
+      //   showInSidebar: false,
+      //   showInMenu: true,
+      //   order: 3
+      // }
     ]
   },
   chat: {
     greeting: {
-      morning: "Good morning",
-      afternoon: "Good afternoon",
-      evening: "Good evening"
+      morning: "Hi, GYS Team \n Can I Help You Today?",
+      afternoon: "Hi, GYS Team \n Can I Help You Today?",
+      evening: "Hi, GYS Team \n Can I Help You Today?"
     },
-    welcomeMessage: "I'm your AI assistant. Start a conversation by typing a message below or try one of these suggestions",
+    welcomeMessage: "Ready to assist you anything about the company information you need. Let's get started!",
     messageLimit: 4, // Number of messages to fetch per request, must even number
     recommendationQuestions: [
-      "What are the latest trends in web development?",
-      "Help me write a professional email",
-      "Explain quantum computing in simple terms",
-      "Give me a recipe for chocolate chip cookies",
-      "How do I improve my productivity?",
-      "What's the difference between React and Vue?",
-      "Help me plan a weekend trip",
-      "Explain machine learning basics"
+      "What is Garuda Yamato Steel's main product?",
+      "Can you provide information about Garuda Yamato Steel's sustainability initiatives?",
+      "How does Garuda Yamato Steel ensure product quality?",
+      "What industries does Garuda Yamato Steel serve?"
     ]
   }
 }
