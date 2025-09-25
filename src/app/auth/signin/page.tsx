@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Logo from "@/components/Logo"
 import { getSiteConfig } from "@/lib/site-config"
+import { getSafeCallbackUrl } from "@/lib/callback-utils"
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,6 +13,7 @@ export default function SignIn() {
   const [error, setError] = useState("")
   const router = useRouter()
   const searchParams = useSearchParams()
+  const next = getSafeCallbackUrl(searchParams.get('next'))
   const siteConfig = getSiteConfig()
   const [CurrenTime, setCurrenTime] = useState<null | Date>(null)
 
@@ -67,13 +69,13 @@ export default function SignIn() {
     try {
       const result = await signIn('token', {
         accessToken: accessToken,
-        redirect: false,
+        callbackUrl: next 
       })
 
       if (result?.error) {
         setError("Invalid access token")
       } else {
-        router.push('/chat')
+        router.push(next)
       }
     } catch (err) {
       console.error('Sign in error:', err)
