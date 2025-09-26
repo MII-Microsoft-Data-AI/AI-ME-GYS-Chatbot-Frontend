@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           // Call the backend /auth endpoint
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth`, {
+          const response = await fetch(`${process.env.BACKEND_URL || 'http://localhost:8000'}/auth`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
 
           if (response.ok) {
             const resData = await response.json() as AuthResponse
+            console.log('Authentication successful:', resData)
             return {
               id: resData.data.user.users_id,
               email: resData.data.user.users_email,

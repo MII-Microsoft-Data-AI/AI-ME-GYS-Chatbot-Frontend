@@ -305,8 +305,8 @@ def authenticate(request: VerifyTokenRequest):
     if not token:
         raise HTTPException(status_code=400, detail="Missing access_token in request body")
     
-    if token == os.getenv("ACCESS_TOKEN"):
-        return{ 
+    if token == "abcdefghijk":
+        return { 
           'code': 200,
           'data': { 
             'user': { 
@@ -317,7 +317,10 @@ def authenticate(request: VerifyTokenRequest):
           },
           'expired_at': '2025-09-11 11:53:28.640',
           'message': 'Token is valid.',
-          'source': 'Token Validation'}
+          'source': 'Token Validation'
+        }
+
+    raise HTTPException(status_code=401, detail="Invalid access token")
 
 if __name__ == "__main__":
     import uvicorn
