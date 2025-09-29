@@ -10,6 +10,7 @@ import {
 } from "@assistant-ui/react-markdown";
 import remarkGfm from "remark-gfm";
 import { type FC, memo, useState } from "react";
+import type React from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
 
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
@@ -20,6 +21,8 @@ import { MermaidDiagram } from "@/components/assistant-ui/mermaid-diagram";
 
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import { CustomDocReference, CustomLinkReference } from "./custom-markdown";
 
 
 function normalizeCustomMathTags(input: string): string {
@@ -36,12 +39,24 @@ function normalizeCustomMathTags(input: string): string {
   );
 }
 
+function processCustomPatterns(input: string): string {
+  return input
+    // Convert [doc-(id)] to HTML that react-markdown can parse
+    .replace(/\[doc-\(([^)]+)\)\]/g, '<span class="custom-doc-placeholder" data-id="$1"></span>')
+    // Convert [link-(url)] to HTML that react-markdown can parse  
+    .replace(/\[link-\(([^)]+)\)\]/g, '<span class="custom-link-placeholder" data-url="$1"></span>');
+}
+
+function combinePreprocessors(input: string): string {
+  return processCustomPatterns(normalizeCustomMathTags(input));
+}
+
 const MarkdownTextImpl = () => {
   return (
     <MarkdownTextPrimitive
       remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeKatex]}
-      preprocess={normalizeCustomMathTags}
+      rehypePlugins={[rehypeRaw, rehypeKatex]}
+      preprocess={combinePreprocessors}
       className="aui-md"
       componentsByLanguage={{
         mermaid: {
@@ -254,4 +269,25 @@ const defaultComponents = memoizeMarkdownComponents({
     );
   },
   CodeHeader,
+  // Custom span handler for placeholder components
+  span: ({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement> & { children?: React.ReactNode }) => {
+    // Handle custom doc 
+    // format: [doc-(...)]
+    if (className === 'custom-doc-placeholder') {
+      const dataProps = props as Record<string, string>;
+      const id = dataProps['data-id'];
+      return <CustomDocReference id={id} />;
+    }
+    
+    // Handle custom link placeholders
+    // format: [link-(...)]
+    if (className === 'custom-link-placeholder') {
+      const dataProps = props as Record<string, string>;
+      const url = dataProps['data-url'];
+      return <CustomLinkReference url={url} />;
+    }
+    
+    // Default span behavior
+    return <span className={className} {...props}>{children}</span>;
+  },
 });
