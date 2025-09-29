@@ -9,12 +9,13 @@ interface SignInPageProps {
 export default async function SignIn({ searchParams }: SignInPageProps) {
   const params = await searchParams
   const next = getSafeCallbackUrl(params.next as string) || "/chat"
-  const siteConfig = getSiteConfig()
+
+  const accessToken = params.accessToken as string || ""
 
   return (
     <SignInClient 
       callbackUrl={next}
-      siteConfig={siteConfig}
+      accessToken={accessToken}
     />
   )
 }

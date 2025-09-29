@@ -45,6 +45,7 @@ async def health():
 # Add external routers
 from routes.chat_conversation import chat_conversation_route
 from routes.file_indexing import file_indexing_route
+from routes.mock_auth import mock_auth
 
 app.include_router(
     chat_conversation_route
@@ -54,4 +55,8 @@ app.include_router(
     file_indexing_route,
     prefix="/api/v1",
     tags=["file-indexing"]
+)
+
+app.include_router(
+    mock_auth
 )

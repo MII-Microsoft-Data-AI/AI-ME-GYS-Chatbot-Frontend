@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           // Call the backend /auth endpoint
-          const response = await fetch(`${process.env.BACKEND_URL || 'http://localhost:8000'}/auth`, {
+          const response = await fetch(`${process.env.GYS_AUTH_URL}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
