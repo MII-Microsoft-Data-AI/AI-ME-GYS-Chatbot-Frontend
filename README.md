@@ -1,16 +1,40 @@
-# ChatGPT Clone Frontend
+# AI-ME-GYS Chatbot Frontend
 
-A ChatGPT-like frontend application built with Next.js, TypeScript, TailwindCSS, and NextAuth.
+An advanced AI chatbot frontend application built with Next.js 15, TypeScript, TailwindCSS, and NextAuth. This application provides a sophisticated ChatGPT-like interface with comprehensive file management and resource indexing capabilities.
 
-## Features
+**Developed by PT. Mitra Integrasi Informatika for PT. Garuda Yamato Steel**
 
-- 🔐 Authentication with NextAuth (Google OAuth)
-- 💬 ChatGPT-like interface with sidebar and chat area
-- 📝 Markdown support for messages
-- 🎨 Responsive design with TailwindCSS
-- 🚀 Built with Next.js App Router
-- 🔧 TypeScript for type safety
-- 🔗 Backend API Integration Ready
+> ⚠️ **Proprietary Software**: This software is exclusively licensed to PT. Garuda Yamato Steel and is not for redistribution or use by other companies.
+
+## ✨ Features
+
+### 🔐 Authentication & Security
+- **NextAuth Integration**: Secure authentication with Google OAuth support
+- **Mock Authentication**: Development-friendly mock auth for UI testing
+- **Basic HTTP Authentication**: Backend API authentication with environment-based credentials
+- **JWT Token Management**: Automatic token handling and session management
+
+### 💬 Advanced Chat Interface
+- **ChatGPT-like UI**: Modern, responsive chat interface with sidebar navigation
+- **Streaming Responses**: Real-time message streaming from backend
+- **Rich Markdown Support**: Full markdown rendering with syntax highlighting
+- **Assistant UI Components**: Built with @assistant-ui/react for enhanced UX
+- **File Attachments**: Support for file uploads and attachments in chat
+- **Conversation Management**: Create, pin, and delete conversations
+
+### 🎨 User Experience
+- **Responsive Design**: Mobile-first design with TailwindCSS v4
+- **Dark/Light Theme**: Adaptive theming support
+- **Loading States**: Comprehensive loading indicators and progress tracking
+- **Error Handling**: User-friendly error messages with retry mechanisms
+- **Toast Notifications**: Real-time user feedback system
+
+### 🚀 Technical Features
+- **Next.js 15**: Latest React framework with App Router
+- **TypeScript**: Full type safety across the application
+- **Azure Integration**: Document Intelligence, Blob Storage, AI Search
+- **Real-time Updates**: WebSocket-like polling for status updates
+- **Performance Optimized**: Efficient API calls and caching strategies
 
 ## Backend API Integration
 
@@ -32,11 +56,11 @@ This frontend is designed to work with a custom inferencing backend. The Next.js
 2. **Implement Required Endpoints:**
    Your backend must provide these endpoints with Basic authentication:
 
-   - `POST /chat/inference` - Chat inference with streaming
+   - `POST /chat` - Chat inference with streaming
    - `GET /conversations` - List conversations
    - `PUT /conversations/{id}/pin` - Pin/unpin conversation
    - `DELETE /conversations/{id}` - Delete conversation
-   - `GET /conversations/{id}/chats` - Get chat history
+   - `GET /conversations/{id}/chat` - Get chat history
 
 3. **Authentication:**
    - All requests include `Authorization: Basic <base64>` header
@@ -51,14 +75,19 @@ This frontend is designed to work with a custom inferencing backend. The Next.js
 
 See [`docs/api-draft.md`](docs/api-draft.md) for complete API specifications, request/response schemas, and integration examples.
 
-## Development Setup
+## 🚀 Quick Start
 
-### Quick Start with Mock Backend
+### Prerequisites
+- **Node.js 18+** or **Bun** (recommended for frontend)
+- **Python 3.11+** and **UV** (for backend)
+- **Azure Account** (optional, for full AI features)
+
+### One-Command Setup
 
 1. **Clone and setup:**
    ```bash
-   git clone <repository-url>
-   cd chatgpt-frontend
+   git clone https://github.com/MII-Microsoft-Data-AI/AI-ME-GYS-Chatbot-Frontend.git
+   cd AI-ME-GYS-Chatbot-Frontend
    make setup
    ```
 
@@ -67,9 +96,17 @@ See [`docs/api-draft.md`](docs/api-draft.md) for complete API specifications, re
    make dev
    ```
 
-3. **Open in browser:**
-   - Frontend: [http://localhost:3000](http://localhost:3000)
-   - Mock Backend: [http://localhost:8000](http://localhost:8000)
+3. **Access the application:**
+   - **Frontend**: [http://localhost:3000](http://localhost:3000)
+   - **Backend API**: [http://localhost:8000](http://localhost:8000)
+   - **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Features Available Out of the Box
+- ✅ **Mock Authentication** - No OAuth setup required
+- ✅ **Chat Interface** - Fully functional AI chat
+- ✅ **File Upload** - Drag & drop file management
+- ✅ **Real-time Updates** - Live status tracking
+- ✅ **Responsive Design** - Works on all devices
 
 ### Manual Setup
 
@@ -128,29 +165,48 @@ See [`docs/api-draft.md`](docs/api-draft.md) for complete API specifications, re
    # Or: make dev-frontend
    ```
 
-### Development Commands
+### 🔧 Development Commands
 
 ```bash
-# Full development setup (backend + frontend)
-make dev
-bun run dev:full
+# 🚀 Development Workflow
+make dev              # Start both backend and frontend
+make dev-backend      # Start only backend (Python/FastAPI)
+make dev-frontend     # Start only frontend (Next.js)
+make dev-logs         # Start with detailed logging
 
-# Individual services
-make dev-backend    # Start only mock backend
-make dev-frontend   # Start only frontend
-bun run dev:backend
-bun run dev:frontend
+# 📊 Monitoring & Status
+make status           # Check running services
+make stop             # Stop all services gracefully
+bun run test:api      # Test backend API connectivity
 
-# Utility commands
-make status         # Check running services
-make stop          # Stop all services
-make clean         # Clean up generated files
-make install       # Install all dependencies
+# 🛠️ Setup & Maintenance
+make setup            # Complete project setup
+make install          # Install all dependencies
+make clean            # Clean generated files and caches
+make help             # Show all available commands
 
-# Database operations
-make db-reset      # Reset database
-make db-backup     # Backup database
-make db-restore    # Restore database
+# 🐛 Development Utilities
+bun run lint          # Run ESLint checks
+bun run build         # Build for production
+bun run start         # Start production server
+
+# 🗄️ Backend-specific Commands
+cd mock-backend && uv run uvicorn main:app --reload  # Backend with auto-reload
+cd mock-backend && uv sync                           # Install Python dependencies
+```
+
+### 📁 File Management Features
+
+The application includes a comprehensive file management system:
+
+```bash
+# Available through the UI at /resource-management
+- 📤 Drag & drop file upload (PDF, Word, Excel, PowerPoint, Images)
+- 📊 Real-time indexing status tracking
+- 🔄 File reindexing and retry mechanisms
+- 🗑️ File deletion with confirmation
+- 📈 Statistics dashboard with progress indicators
+- 🔍 Azure AI Search integration for document content
 ```
 
 ## Mock Authentication
@@ -165,21 +221,63 @@ When `MOCK_AUTH=true` is set in development:
 - No Google OAuth setup required
 - Perfect for UI development and testing
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 src/
 ├── app/
 │   ├── auth/signin/          # Authentication pages
-│   ├── chat/                 # Chat interface
-│   ├── api/auth/             # NextAuth API routes
-│   └── globals.css           # Global styles
+│   ├── chat/                 # Chat interface and conversation management
+│   ├── api/                  # NextAuth and backend API routes
+│   │   ├── auth/             # NextAuth configuration
+│   │   └── be/               # Backend proxy endpoints
+│   ├── globals.css           # Global styles and CSS variables
+│   ├── layout.tsx            # Root layout with providers
+│   └── page.tsx              # Landing page
 ├── components/
-│   ├── Sidebar.tsx           # Left sidebar component
-│   └── Providers.tsx         # Session provider wrapper
+│   ├── assistant-ui/         # Advanced chat UI components
+│   │   ├── attachment.tsx    # File attachment handling
+│   │   ├── markdown-text.tsx # Markdown rendering
+│   │   └── thread.tsx        # Chat thread management
+│   ├── ui/                   # Reusable UI components (Radix-based)
+│   ├── FileUpload.tsx        # Drag & drop file upload
+│   ├── FileList.tsx          # File management interface
+│   ├── FileStats.tsx         # File statistics dashboard
+│   ├── ChatHeader.tsx        # Chat interface header
+│   ├── ChatInput.tsx         # Message input component
+│   ├── GlobalNavbar.tsx      # Main navigation
+│   └── Providers.tsx         # Session and context providers
+├── contexts/
+│   ├── ChatContext.tsx       # Chat state management
+│   ├── ChatInputContext.tsx  # Input handling context
+│   └── ModalContext.tsx      # Modal state management
+├── hooks/
+│   ├── useNavigation.ts      # Navigation utilities
+│   └── useToast.ts           # Toast notification system
 ├── lib/
-│   └── mock-session.ts       # Mock session utilities
+│   ├── integration/          # Backend API integration
+│   │   └── client/           # Type-safe API clients
+│   ├── utils.ts              # Utility functions
+│   └── site-config.ts        # Site configuration
+├── types/
+│   └── next-auth.d.ts        # NextAuth type definitions
+├── utils/
+│   ├── file-utils.ts         # File handling utilities
+│   ├── date-utils.ts         # Date formatting
+│   └── langgraph/            # LangGraph integration
 └── auth.ts                   # NextAuth configuration
+
+mock-backend/                 # Complete backend implementation
+├── agent/                    # AI agent and tools
+├── lib/                      # Authentication and database
+├── orchestration/            # File indexing workflows
+├── routes/                   # API endpoints
+└── main.py                   # FastAPI application
+
+docs/                         # Comprehensive documentation
+├── AUTHENTICATION_SUMMARY.md # Auth implementation guide
+├── RESOURCE_MANAGEMENT_*.md  # File management docs
+└── backend-*.md              # Backend integration guides
 ```
 
 ## Available Scripts
@@ -247,44 +345,106 @@ The mock server provides:
 - ✅ Complete CRUD operations
 - ✅ CORS support
 
+## ⚙️ Configuration
+
 ### Environment Variables
+
+Create a `.env.local` file in the root directory:
 
 ```env
 # =============================================================================
-# APPLICATION CONFIGURATION
+# FRONTEND CONFIGURATION
 # =============================================================================
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=development-secret-key-change-in-production
+
+# Development Features
+MOCK_AUTH=true  # Enable mock authentication for development
+
+# Company Integration (Optional)
 NEXT_PUBLIC_GYS_PORTAL_URL=https://www.garudayamatosteel.com
 
 # =============================================================================
-# API CONFIGURATION
+# BACKEND API CONFIGURATION
 # =============================================================================
 
 # Backend URL for server-side API calls
 BACKEND_URL=http://localhost:8000
 
-# Backend API Authentication
-# Basic auth credentials for backend API access
+# Backend API Authentication (matches mock-backend/.env)
 BACKEND_API_USERNAME=apiuser
 BACKEND_API_PASSWORD=securepass123
 
 # =============================================================================
-# AUTHENTICATION CONFIGURATION
+# GOOGLE OAUTH (Optional - for production)
 # =============================================================================
 
-# NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key-here
+# GOOGLE_CLIENT_ID=your-google-client-id
+# GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
-## Technologies Used
+### Backend Configuration
 
-- **Next.js 15** - React framework with App Router
-- **TypeScript** - Type safety
-- **TailwindCSS** - Utility-first CSS framework
-- **NextAuth** - Authentication library
-- **React Markdown** - Markdown rendering
-- **Bun** - Package manager and runtime
-- **Axios** - HTTP client for API calls
+The mock backend requires its own environment file (`mock-backend/.env`):
+
+```env
+# Azure OpenAI Configuration
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-api-key-here
+AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name
+AZURE_OPENAI_API_VERSION=2024-02-01
+
+# Authentication (matches frontend)
+BACKEND_AUTH_USERNAME=apiuser
+BACKEND_AUTH_PASSWORD=securepass123
+
+# Azure Services (Optional - for file indexing)
+AZURE_STORAGE_CONNECTION_STRING=your-storage-connection-string
+AZURE_STORAGE_CONTAINER_NAME=file-uploads
+AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=your-doc-intelligence-endpoint
+AZURE_DOCUMENT_INTELLIGENCE_API_KEY=your-doc-intelligence-key
+AZURE_SEARCH_ENDPOINT=your-search-endpoint
+AZURE_SEARCH_API_KEY=your-search-key
+AZURE_SEARCH_INDEX_NAME=document-index
+```
+
+## 🛠️ Technologies Used
+
+### Frontend Stack
+- **Next.js 15** - React framework with App Router and Turbopack
+- **TypeScript** - Full type safety and modern JavaScript features
+- **TailwindCSS v4** - Utility-first CSS framework with advanced features
+- **NextAuth 4.24** - Comprehensive authentication solution
+- **Assistant UI** - Advanced chat interface components (@assistant-ui/react)
+- **Radix UI** - Accessible, unstyled UI primitives
+- **Zustand** - Lightweight state management
+- **React 19** - Latest React features and concurrent rendering
+
+### Backend & AI Integration
+- **FastAPI** - High-performance Python backend (mock-backend)
+- **LangGraph** - AI agent orchestration and workflow management
+- **Azure OpenAI** - GPT model integration for chat responses
+- **Azure AI Search** - Document indexing and semantic search
+- **Azure Blob Storage** - Secure file storage and management
+- **Azure Document Intelligence** - Advanced document processing
+
+### Development & Build Tools
+- **Bun** - Fast package manager and JavaScript runtime
+- **UV** - Ultra-fast Python package installer (backend)
+- **ESLint 9** - Latest JavaScript linting with flat config
+- **PostCSS** - CSS processing and optimization
+- **Make** - Build automation and development workflows
+
+### Libraries & Utilities
+- **React Markdown** - Rich markdown rendering with plugins
+- **Prism.js & Shiki** - Advanced syntax highlighting
+- **KaTeX** - Mathematics rendering
+- **Mermaid** - Diagram and flowchart rendering
+- **Lucide React** - Modern icon library
+- **Fuse.js** - Fuzzy search capabilities
+- **Motion** - Smooth animations and transitions
 
 ## Production Deployment
 
@@ -292,10 +452,79 @@ NEXTAUTH_SECRET=your-secret-key-here
 2. Set your backend endpoint and credential `BACKEND_URL`, `BACKEND_API_USERNAME`, `BACKEND_API_PASSWORD`
 3. Deploy to your preferred platform (Vercel, Netlify, etc.)
 
-## Contributing
+## 📋 Recent Updates
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+### Latest Features (September 2025)
+- ✨ **File Attachment Support**: Complete file upload and attachment system
+- 🔐 **Enhanced Authentication**: Mock authentication for development
+- 🎨 **Custom UI Components**: Advanced assistant UI with document references
+- 📁 **Resource Management**: Full file indexing and management interface
+- 🔄 **Real-time Updates**: Live polling for file processing status
+- 🛡️ **Security Improvements**: HTTP Basic Auth for backend API
+- 📱 **Mobile Optimization**: Enhanced responsive design
+
+### Architecture Improvements
+- 🏗️ **Modular Components**: Separated concerns with context providers
+- 🔌 **API Integration**: Type-safe backend integration layer
+- 📊 **State Management**: Centralized state with Zustand
+- 🎯 **Error Handling**: Comprehensive error recovery mechanisms
+- 🚀 **Performance**: Optimized bundle size and loading states
+
+## 🔗 Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- **[Authentication Guide](docs/AUTHENTICATION_SUMMARY.md)** - Complete auth setup
+- **[Backend Integration](docs/backend-authentication.md)** - API integration guide
+- **[Resource Management](docs/RESOURCE_MANAGEMENT_COMPLETE.md)** - File system guide
+- **[API Contract](docs/backend-api-contract.md)** - Backend API documentation
+- **[LangGraph Integration](docs/LANGGRAPH_STREAMING_PROTOCOL.md)** - AI agent setup
+
+## 🏢 Company Information
+
+**Developer**: PT. Mitra Integrasi Informatika  
+**Client**: PT. Garuda Yamato Steel  
+**Project Type**: Custom Software Solution  
+
+## 📄 License & Ownership
+
+This software is proprietary and exclusively licensed to **PT. Garuda Yamato Steel**. 
+
+- ❌ **Not for redistribution** to other companies or organizations
+- ❌ **No open source license** - all rights reserved
+- ✅ **Exclusive use** by PT. Garuda Yamato Steel only
+- ⚖️ **Warranty period** applies as per contract terms
+
+## 🛠️ Development & Maintenance
+
+### During Warranty Period
+- Development and maintenance handled by **PT. Mitra Integrasi Informatika**
+- Bug fixes and feature updates included per contract
+
+### After Warranty Period
+- Support available through separate maintenance contract
+- For continued support and development, contact: **microsoft.ai@mii.co.id**
+
+## 📞 Support & Contact
+
+### Technical Support
+- **Email**: microsoft.ai@mii.co.id
+- **Company**: PT. Mitra Integrasi Informatika
+- **Support Hours**: Business hours (Indonesian time)
+
+### Support Scope
+- ✅ Bug fixes and technical issues
+- ✅ Feature enhancements and customizations  
+- ✅ System maintenance and updates
+- ✅ Integration support and consulting
+- ✅ Training and knowledge transfer
+
+### Important Notes
+- Support is provided exclusively to **PT. Garuda Yamato Steel**
+- Post-warranty support requires a separate maintenance agreement
+- For urgent issues, please include detailed error logs and reproduction steps
+
+---
+
+**© 2025 PT. Mitra Integrasi Informatika. All rights reserved.**  
+*Developed exclusively for PT. Garuda Yamato Steel*
