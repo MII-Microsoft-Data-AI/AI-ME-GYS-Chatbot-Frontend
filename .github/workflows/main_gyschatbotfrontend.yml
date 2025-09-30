@@ -23,17 +23,26 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: npm install and build
         run: |
           npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm run build
+          npm prune --production
+
+      - name: Prepare artifact for deployment job
+        run: |
+          mkdir -p ./standalone
+          cp -R ./.next/standalone ./
+          cp -R ./public ./standalone/public
+          cp -R ./.next/static ./standalone/.next
+          rm -rf ./standalone/.env
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: node-app
-          path: .
+          path: ./standalone
 
   deploy:
     runs-on: ubuntu-latest
