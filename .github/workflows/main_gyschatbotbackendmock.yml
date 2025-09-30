@@ -10,7 +10,7 @@ on:
       - main
     paths: 
       - 'mock-backend/**'
-      - .github/workflows/main_appservice-poc-chatbot-backend.yml
+      - .github/workflows/main_gyschatbotbackendmock.yml
   workflow_dispatch:
 
 jobs:
