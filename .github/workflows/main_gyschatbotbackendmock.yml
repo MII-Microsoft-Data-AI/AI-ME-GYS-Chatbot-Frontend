@@ -8,6 +8,9 @@ on:
   push:
     branches:
       - main
+    paths: 
+      - 'mock-backend/**'
+      - .github/workflows/main_appservice-poc-chatbot-backend.yml
   workflow_dispatch:
 
 jobs:
@@ -15,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
-
+    defaults:
+      run:
+        working-directory: ./mock-backend
     steps:
       - uses: actions/checkout@v4
 
@@ -38,9 +43,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: python-app
+          include-hidden-files: true
           path: |
-            .
-            !venv/
+            ./mock-backend
+            !**/__pycache__/
+
 
   deploy:
     runs-on: ubuntu-latest
