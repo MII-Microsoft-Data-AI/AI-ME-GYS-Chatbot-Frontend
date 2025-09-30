@@ -1,4 +1,5 @@
 """Main FastAPI server with LangGraph integration."""
+import os
 import sys
 sys.dont_write_bytecode = True
 
@@ -60,3 +61,7 @@ app.include_router(
 app.include_router(
     mock_auth
 )
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
