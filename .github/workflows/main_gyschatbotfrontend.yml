@@ -1,12 +1,21 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - gyschatbotfrontend
+name: Build and deploy Next.js app to Azure Web App - gyschatbotfrontend
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'components/**'
+      - 'package.json'
+      - 'bun.lock'
+      - 'next.config.ts'
+      - 'tsconfig.json'
+      - '.env.sample'
   workflow_dispatch:
 
 jobs:
@@ -18,31 +27,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+          cache: 'npm'
 
-      - name: npm install and build
+      - name: Install dependencies and build Next.js app
         run: |
-          npm install
-          npm run build
-          npm prune --production
+          bun install --frozen-lockfile
+          bun run build
 
-      - name: Prepare artifact for deployment job
+      - name: Prepare Next.js standalone deployment
         run: |
-          mkdir -p ./standalone
-          cp -R ./.next/standalone ./
-          cp -R ./public ./standalone/public
-          cp -R ./.next/static ./standalone/.next
-          rm -rf ./standalone/.env
+          mkdir -p ./deployment
+          # Copy standalone build output
+          cp -R ./.next/standalone/* ./deployment/
+          # Copy public assets
+          cp -R ./public ./deployment/public
+          # Copy static assets
+          cp -R ./.next/static ./deployment/.next/static
+          # Remove sensitive files
+          rm -f ./deployment/.env*
+          # Create a package.json for production
+          echo '{"name":"gyschatbotfrontend","scripts":{"start":"node server.js"},"dependencies":{}}' > ./deployment/package.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
-          name: node-app
-          path: ./standalone
+          name: nextjs-app
+          path: ./deployment
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,7 +72,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: nextjs-app
       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
