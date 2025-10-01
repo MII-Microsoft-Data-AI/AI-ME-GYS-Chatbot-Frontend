@@ -5,7 +5,7 @@ import { formatRelativeTime } from "@/utils/date-utils";
 import { loadFromLanggraphStateHistoryJSON } from "@/utils/langgraph/to-assistant-ui";
 import { useCustomDataStreamRuntime } from "@/utils/custom-data-stream-runtime";
 
-const BaseAPIPath = "/api/be"
+const BaseAPIPath = "/api/be/v1/frontend"
 
 // Attachments Handler
 // For now, we only handle images -kaenova
@@ -97,10 +97,12 @@ type ConversationListItem = {
 export const GetConversationsList = async (): Promise<ConversationListItem[] | null> => {
 
   interface ConversationApiResponse {
-    id: string
-    title: string
-    created_at: number
-    is_pinned: boolean
+    id: string,
+    user_id: string,
+    graph_name: string,
+    is_pinned: boolean,
+    title: string,
+    last_used_at: number,
   }
 
 
@@ -115,8 +117,8 @@ export const GetConversationsList = async (): Promise<ConversationListItem[] | n
   const conversations = data.map((conv) => ({
     id: conv.id,
     title: conv.title,
-    date: formatRelativeTime(conv.created_at * 1000),
-    createdAt: conv.created_at * 1000,
+    date: formatRelativeTime(conv.last_used_at * 1000),
+    createdAt: conv.last_used_at * 1000,
     isPinned: conv.is_pinned
   }))
 
