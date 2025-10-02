@@ -46,11 +46,11 @@ jobs:
 
       - name: Prepare Next.js standalone deployment
         run: |
-          mkdir -p ./standalone
-          cp -R ./.next/standalone ./
-          cp -R ./public ./standalone/public
-          cp -R ./.next/static ./standalone/.next
-          rm -rf ./standalone/.env
+          mkdir -p ./deployment
+          cp -R ./.next/standalone ./deployment
+          cp -R ./public ./deployment/public
+          cp -R ./.next/static ./deployment/.next
+          rm -rf ./deployment/.env
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
