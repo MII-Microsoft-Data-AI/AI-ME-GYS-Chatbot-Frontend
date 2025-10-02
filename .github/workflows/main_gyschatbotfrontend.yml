@@ -28,36 +28,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
       - name: Set up Node.js version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: '22.x'
-          cache: 'npm'
 
-      - name: Install dependencies and build Next.js app
+      - name: npm install and build
         run: |
-          bun install --frozen-lockfile
-          bun run build
+          npm install
+          npm run build
+          npm prune --production
 
-      - name: Prepare Next.js standalone deployment
+      - name: Prepare artifact for deployment job
         run: |
-          mkdir -p ./deployment
-          cp -R ./.next/standalone ./deployment
-          cp -R ./public ./deployment/public
-          cp -R ./.next/static ./deployment/.next
-          rm -rf ./deployment/.env
+          mkdir -p ./standalone
+          cp -R ./.next/standalone ./
+          cp -R ./public ./standalone/public
+          cp -R ./.next/static ./standalone/.next
+          rm -rf ./standalone/.env
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
-          name: nextjs-app
-          path: ./deployment
+          name: node-app
+          path: ./standalone
 
   deploy:
     runs-on: ubuntu-latest
@@ -67,7 +62,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: nextjs-app
+          name: node-app
       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
