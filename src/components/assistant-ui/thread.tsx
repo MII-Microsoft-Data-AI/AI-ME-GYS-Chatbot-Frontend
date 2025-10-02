@@ -37,7 +37,7 @@ import { getTimeOfDay } from "@/utils/time-utils";
 import { ChatMessageSkeleton } from "@/components/ChatMessageSkeleton";
 
 const Settings = {
-  attachments: true,
+  attachments: false,
   editMessages: false, // Currently we dont support editing user messages
   regenerate: false, // Currently we dont support regenerating assistant messages
 }
