@@ -32,12 +32,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
 
-      - name: npm install and build
+      - name: bun install
         run: |
-          npm install
-          npm run build
-          npm prune --production
+          bun install
+          bun run build
 
       - name: Prepare artifact for deployment job
         run: |
