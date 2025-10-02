@@ -45,17 +45,11 @@ jobs:
 
       - name: Prepare Next.js standalone deployment
         run: |
-          mkdir -p ./deployment
-          # Copy standalone build output
-          cp -R ./.next/standalone/* ./deployment/
-          # Copy public assets
-          cp -R ./public ./deployment/public
-          # Copy static assets
-          cp -R ./.next/static ./deployment/.next/static
-          # Remove sensitive files
-          rm -f ./deployment/.env*
-          # Create a package.json for production
-          echo '{"name":"gyschatbotfrontend","scripts":{"start":"node server.js"},"dependencies":{}}' > ./deployment/package.json
+          mkdir -p ./standalone
+          cp -R ./.next/standalone ./
+          cp -R ./public ./standalone/public
+          cp -R ./.next/static ./standalone/.next
+          rm -rf ./standalone/.env
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
