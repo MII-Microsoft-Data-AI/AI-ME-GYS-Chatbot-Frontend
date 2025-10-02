@@ -57,9 +57,9 @@ export const siteConfig: SiteConfig = {
   description: "Garuda Yamato Steel - An AI powered chat assistant",
   url: process.env.NEXTAUTH_URL || "http://localhost:3000", // Update with your actual domain
   keywords: ["chatgpt", "ai", "artificial intelligence", "chat", "assistant", "nextjs", "react"],
-  favicon: "https://www.garudayamatosteel.com/wp-content/uploads/2024/06/cropped-GYS-Favicon-1-32x32.png",
+  favicon: "/icon.png",
   logo: {
-    src: "https://www.garudayamatosteel.com/wp-content/uploads/2024/05/GYS-Logo-Header-1.webp", // Change this to your logo path
+    src: "/icon.png", // Change this to your logo path
     alt: "GYS Logo",
     width: 118,
     height: 24
