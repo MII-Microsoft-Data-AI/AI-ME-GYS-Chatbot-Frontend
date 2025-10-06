@@ -43,6 +43,7 @@ function processCustomPatterns(input: string): string {
   return input
     // Convert [doc-(id)] to HTML that react-markdown can parse
     .replace(/\[doc-\(([^)]+)\)\]/g, '<span class="custom-doc-placeholder" data-id="$1"></span>')
+    .replace(/\[docsum-\(([^)]+)\)\]/g, '<span class="custom-docsum-placeholder" data-id="$1"></span>')
     // Convert [link-(url)] to HTML that react-markdown can parse  
     .replace(/\[link-\(([^)]+)\)\]/g, '<span class="custom-link-placeholder" data-url="$1"></span>');
 }
@@ -276,7 +277,13 @@ const defaultComponents = memoizeMarkdownComponents({
     if (className === 'custom-doc-placeholder') {
       const dataProps = props as Record<string, string>;
       const id = dataProps['data-id'];
-      return <CustomDocReference id={id} />;
+      return <CustomDocReference id={id} type='doc' />
+    }
+
+    if (className === 'custom-docsum-placeholder') {
+      const dataProps = props as Record<string, string>;
+      const id = dataProps['data-id'];
+      return <CustomDocReference id={id} type='docsum' />
     }
     
     // Handle custom link placeholders

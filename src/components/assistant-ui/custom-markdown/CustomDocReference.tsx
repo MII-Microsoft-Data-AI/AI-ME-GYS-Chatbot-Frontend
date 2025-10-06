@@ -9,11 +9,12 @@ import { Download, FileTextIcon } from "lucide-react";
 import { type FC, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChunkData, getChunkData } from "@/lib/integration/client/chunk";
+import { ChunkData, getDocChunkData, getDocSumChunkData } from "@/lib/integration/client/chunk";
 
 // Props for the doc placeholder component
 interface CustomDocReferenceProps {
   id: string;
+  type: 'doc' | 'docsum';
   className?: string;
   onClick?: (id: string) => void;
 }
@@ -21,6 +22,7 @@ interface CustomDocReferenceProps {
 export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   id,
   className,
+  type,
   onClick
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,8 +33,18 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getChunkData(id);
-        setData(data);
+        let data: undefined | ChunkData = undefined;
+        if (type === 'doc') {
+          data = await getDocChunkData(id);
+        } else if (type === 'docsum') {
+          data = await getDocSumChunkData(id);
+        }
+
+        if (data) {
+          setData(data);
+        } else {
+          setError('No data found');
+        }
       } catch (err) {
         console.error('Error fetching chunk data:', err);
         setError('Failed to load document info');
@@ -42,7 +54,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
     };
 
     fetchData();
-  }, [id]);
+  }, [id, type]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -57,7 +69,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
     if (data && data.file_url) {
       const link = document.createElement('a');
       link.href = data.file_url;
-      link.download = data.metadata.filename;
+      link.download = data.filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -65,7 +77,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   };
 
   const buttonText = loading ? 'Loading...' :
-  data ? `${(data as ChunkData).metadata.filename} (Chunk ${(data as ChunkData).metadata.chunk_index})` :  
+  data ? `${(data as ChunkData).filename}` :  
   `Doc: ${id}` 
     
 
@@ -98,8 +110,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
             ) : data ? (
               <>
                 <div className="mb-2">
-                  <strong>File Name:</strong> {data.metadata.filename} <br />
-                  <strong>Chunk Number:</strong> {data.metadata.chunk_index}
+                  <strong>File Name:</strong> {data.filename} <br />
                 </div>
                 <pre className="whitespace-pre-wrap text-sm bg-gray-100 p-2 rounded-lg max-h-64 overflow-scroll">{data.content}</pre>
                 {data.file_url && (
