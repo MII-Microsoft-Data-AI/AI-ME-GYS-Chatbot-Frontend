@@ -4,7 +4,7 @@ export interface ChunkData {
   file_url: string;
 }
 
-const BaseAPIPath = '/api/be/api/v1/chunk';
+const BaseAPIPath = '/api/be/v1/frontend/chunk';
 
 export const getDocChunkData = async (id: string): Promise<ChunkData> => {
   const res = await fetch(`${BaseAPIPath}/doc/${id}`);
