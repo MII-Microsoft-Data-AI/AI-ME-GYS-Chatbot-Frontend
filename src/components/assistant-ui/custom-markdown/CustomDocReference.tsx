@@ -19,6 +19,8 @@ interface CustomDocReferenceProps {
   onClick?: (id: string) => void;
 }
 
+const DownloadFileEnabled = false;
+
 export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   id,
   className,
@@ -66,9 +68,9 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   };
 
   const handleDownload = () => {
-    if (data && data.file_url) {
+    if (data && data.fileurl) {
       const link = document.createElement('a');
-      link.href = data.file_url;
+      link.href = data.fileurl;
       link.download = data.filename;
       document.body.appendChild(link);
       link.click();
@@ -113,7 +115,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
                   <strong>File Name:</strong> {data.filename} <br />
                 </div>
                 <pre className="whitespace-pre-wrap text-sm bg-gray-100 p-2 rounded-lg max-h-64 overflow-scroll">{data.content}</pre>
-                {data.file_url && (
+                {DownloadFileEnabled && data.fileurl && (
                   <div className="mt-4 flex justify-end">
                     <button
                       onClick={handleDownload}

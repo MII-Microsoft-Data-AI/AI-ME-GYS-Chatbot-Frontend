@@ -1,7 +1,7 @@
 export interface ChunkData {
   content: string;
   filename: string;
-  file_url: string;
+  fileurl: string;
 }
 
 const BaseAPIPath = '/api/be/v1/frontend/chunk';
