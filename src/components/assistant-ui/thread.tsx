@@ -18,7 +18,7 @@ import {
   RefreshCwIcon,
   Square,
 } from "lucide-react";
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 import {
   ComposerAddAttachment,
@@ -35,6 +35,7 @@ import * as m from "motion/react-m";
 import { getSiteConfig } from "@/lib/site-config";
 import { getTimeOfDay } from "@/utils/time-utils";
 import { ChatMessageSkeleton } from "@/components/ChatMessageSkeleton";
+import { getSuggestions } from "@/lib/integration/client/suggestions";
 
 const Settings = {
   attachments: false,
@@ -137,13 +138,25 @@ const ThreadWelcome: FC = () => {
 };
 
 const ThreadWelcomeSuggestions: FC = () => {
+  const [SuggestionsData, setSuggestionsData] = useState<string[]>([])
 
-  const config = getSiteConfig()
+  const getSuggestionsData = async () => {
+    try {
+      const data = await getSuggestions()
+      setSuggestionsData(data)
+    } catch (e) {
+      console.error("Failed to fetch suggestions:", e);
+    }
+  }
+
+  useEffect(() => {
+    getSuggestionsData()
+  }, [])
 
   return (
     <div className="aui-thread-welcome-suggestions grid w-full gap-2 @md:grid-cols-2">
 
-      {config.chat.recommendationQuestions.slice(0,4).map((suggestedAction, index) => (
+      {SuggestionsData.slice(0,4).map((suggestedAction, index) => (
         <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
