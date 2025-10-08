@@ -175,10 +175,11 @@ export default function GlobalNavbar({ user }: GlobalNavbarProps) {
     ]
     const chat = allChats.find(c => c.id === chatId)
     if (chat) {
+      const trimmedTitle = chat.title.length > 20 ? chat.title.slice(0, 25) + '...' : chat.title
       showConfirmation({
         chatId,
         chatTitle: chat.title,
-        message: `Are you sure you want to delete "${chat.title}"? This action cannot be undone.`,
+        message: `Are you sure you want to delete "${trimmedTitle}"? This action cannot be undone.`,
         onConfirm: () => deleteChat(chatId)
       })
     }
