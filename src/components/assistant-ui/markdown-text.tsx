@@ -23,6 +23,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import { CustomDocReference, CustomLinkReference } from "./custom-markdown";
+import CustomImage from "./custom-markdown/CustomImage";
 
 
 function normalizeCustomMathTags(input: string): string {
@@ -297,4 +298,5 @@ const defaultComponents = memoizeMarkdownComponents({
     // Default span behavior
     return <span className={className} {...props}>{children}</span>;
   },
+  img: (props) => <CustomImage {...props} />,  
 });
