@@ -36,10 +36,15 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
     const fetchData = async () => {
       try {
         let data: undefined | ChunkData = undefined;
-        if (type === 'doc') {
-          data = await getDocChunkData(id);
-        } else if (type === 'docsum') {
-          data = await getDocSumChunkData(id);
+        const allData = await Promise.allSettled([
+              getDocChunkData(id),
+              getDocSumChunkData(id)
+        ])
+
+        if (allData[0].status === "fulfilled") {
+          data = allData[0].value
+        } else if (allData[1].status === "fulfilled") {
+          data = allData[1].value
         }
 
         if (data) {
