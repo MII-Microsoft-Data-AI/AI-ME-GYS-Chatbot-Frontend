@@ -7,15 +7,7 @@ export interface ChunkData {
 const BaseAPIPath = '/api/be/v1/frontend/chunk';
 
 export const getDocChunkData = async (id: string): Promise<ChunkData> => {
-  const res = await fetch(`${BaseAPIPath}/doc/${id}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch chunk data');
-  }
-  return await res.json() as ChunkData;
-}
-
-export const getDocSumChunkData = async (id: string): Promise<ChunkData> => {
-  const res = await fetch(`${BaseAPIPath}/docsum/${id}`);
+  const res = await fetch(`${BaseAPIPath}/${id}`);
   if (!res.ok) {
     throw new Error('Failed to fetch chunk data');
   }

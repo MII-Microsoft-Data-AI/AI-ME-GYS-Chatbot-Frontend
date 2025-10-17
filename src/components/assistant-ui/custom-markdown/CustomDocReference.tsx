@@ -9,7 +9,7 @@ import { Download, FileTextIcon } from "lucide-react";
 import { type FC, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChunkData, getDocChunkData, getDocSumChunkData } from "@/lib/integration/client/chunk";
+import { ChunkData, getDocChunkData } from "@/lib/integration/client/chunk";
 import { useAssistantState } from "@assistant-ui/react";
 
 // Props for the doc placeholder component
@@ -38,16 +38,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
     const fetchData = async () => {
       try {
         let data: undefined | ChunkData = undefined;
-        const allData = await Promise.allSettled([
-              getDocChunkData(id),
-              getDocSumChunkData(id)
-        ])
-
-        if (allData[0].status === "fulfilled") {
-          data = allData[0].value
-        } else if (allData[1].status === "fulfilled") {
-          data = allData[1].value
-        }
+        data = await getDocChunkData(id)
 
         if (data) {
           setData(data);
