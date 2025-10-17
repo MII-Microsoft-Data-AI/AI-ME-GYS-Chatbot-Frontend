@@ -79,6 +79,10 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   const buttonText = loading ? 'Loading...' :
   data ? `${(data as ChunkData).filename}` :  
   `Doc: ${id}` 
+
+  if (error) {
+    return <></>
+  }
     
 
   return (
