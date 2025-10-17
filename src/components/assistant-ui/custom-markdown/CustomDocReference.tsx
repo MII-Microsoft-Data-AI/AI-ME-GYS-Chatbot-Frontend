@@ -10,6 +10,7 @@ import { type FC, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChunkData, getDocChunkData, getDocSumChunkData } from "@/lib/integration/client/chunk";
+import { useAssistantState } from "@assistant-ui/react";
 
 // Props for the doc placeholder component
 interface CustomDocReferenceProps {
@@ -31,6 +32,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   const [data, setData] = useState<ChunkData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isRunning = useAssistantState(({ thread }) => thread.isRunning); // boolean
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,8 +62,8 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
       }
     };
 
-    fetchData();
-  }, [id, type]);
+    if (!isRunning) fetchData();
+  }, [id, type, isRunning]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
