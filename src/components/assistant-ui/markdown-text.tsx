@@ -300,5 +300,7 @@ const defaultComponents = memoizeMarkdownComponents({
     // Default span behavior
     return <span className={className} {...props}>{children}</span>;
   },
-  img: (props) => <CustomImage {...props} />,  
+  img: (props) => {
+    return <CustomImage {...props} />
+  }  
 });

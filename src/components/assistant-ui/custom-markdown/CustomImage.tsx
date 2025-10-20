@@ -4,36 +4,36 @@ import React, { useState, useEffect } from 'react'
 import { getImageSrc } from '@/lib/integration/client/image'
 
 function CustomImage(props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+  // if the src no (protocol):// then we will manipulate it to hit the backend 
   const initialSrc = typeof props.src === 'string' ? props.src : ''
   const [FinalSRC, setFinalSRC] = useState<string>(initialSrc)
-  const [, setLoading] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  console.log(initialSrc)
 
   useEffect(() => {
     let createdObjectUrl: string | null = null
-    let isCancelled = false
     const srcVal = props.src
 
     setLoading(true)
 
-    if (typeof srcVal === 'string') {
-      if (srcVal.startsWith('file://')) {
-        // extract content after the scheme and fetch the image
-        const content = srcVal.slice('file://'.length)
-        getImageSrc(content)
+    if (typeof srcVal === 'string' && srcVal.length > 0) {
+      // Check if src has a protocol (e.g., http://, https://, data:, etc.)
+      const hasProtocol = /^[a-z]+:\/\//.test(srcVal) || srcVal.startsWith('data:')
+      
+      if (!hasProtocol) {
+        // No protocol means we need to get the final image src using getImageSrc
+        getImageSrc(srcVal)
           .then((imageSrc) => {
-            if (!isCancelled) {
-              setFinalSRC(imageSrc)
-              setLoading(false)
-            }
+            setFinalSRC(imageSrc)
+            setLoading(false)
           })
           .catch((error) => {
             console.error('Failed to fetch image:', error)
-            if (!isCancelled) {
-              setFinalSRC('')
-              setLoading(false)
-            }
+            setFinalSRC('')
+            setLoading(false)
           })
       } else {
+        // Has protocol, use src as-is
         setFinalSRC(srcVal)
         setLoading(false)
       }
@@ -48,12 +48,15 @@ function CustomImage(props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTML
     }
 
     return () => {
-      isCancelled = true
       if (createdObjectUrl) {
         URL.revokeObjectURL(createdObjectUrl)
       }
     }
   }, [props.src])
+
+  if (isLoading && !FinalSRC) {
+  return <></>
+  }
 
   return (
     <img

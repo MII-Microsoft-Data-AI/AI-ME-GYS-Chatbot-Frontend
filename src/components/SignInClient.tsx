@@ -1,7 +1,7 @@
 'use client'
 
 import { signIn } from "next-auth/react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Logo from "@/components/Logo"
 import { getSiteConfig } from "@/lib/site-config"
