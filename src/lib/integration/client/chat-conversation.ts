@@ -2,7 +2,7 @@
 
 import { CompositeAttachmentAdapter, SimpleImageAttachmentAdapter, ThreadHistoryAdapter, ThreadMessage } from "@assistant-ui/react";
 import { formatRelativeTime } from "@/utils/date-utils";
-import { loadFromLanggraphStateHistoryJSON, loadFromLanggraphStateJSON } from "@/utils/langgraph/to-assistant-ui";
+import { loadFromLanggraphStateJSON } from "@/utils/langgraph/to-assistant-ui";
 import { useCustomDataStreamRuntime } from "@/utils/custom-data-stream-runtime";
 
 const BaseAPIPath = "/api/be/v1/frontend"
