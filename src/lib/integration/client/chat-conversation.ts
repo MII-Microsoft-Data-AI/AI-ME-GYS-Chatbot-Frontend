@@ -2,7 +2,7 @@
 
 import { CompositeAttachmentAdapter, SimpleImageAttachmentAdapter, ThreadHistoryAdapter, ThreadMessage } from "@assistant-ui/react";
 import { formatRelativeTime } from "@/utils/date-utils";
-import { loadFromLanggraphStateHistoryJSON } from "@/utils/langgraph/to-assistant-ui";
+import { loadFromLanggraphStateHistoryJSON, loadFromLanggraphStateJSON } from "@/utils/langgraph/to-assistant-ui";
 import { useCustomDataStreamRuntime } from "@/utils/custom-data-stream-runtime";
 
 const BaseAPIPath = "/api/be/v1/frontend"
@@ -76,7 +76,7 @@ export const LoadConversationHistory = async (conversationId: string): Promise<L
     }
 
     const resMsg = await response.json();
-    const messageData = loadFromLanggraphStateHistoryJSON(resMsg);
+    const messageData = loadFromLanggraphStateJSON(resMsg);
 
     // @ts-expect-error // TypeScript is not able to infer the type correctly here
     return messageData;
