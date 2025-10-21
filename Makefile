@@ -21,7 +21,7 @@ help:
 dev-backend:
 	@echo "🔧 Starting backend server..."
 	@echo "This is not reloadable. Restart this command to apply changes."
-	cd mock-backend && uv run uvicorn main:app --host 0.0.0.0 --port 8000
+	cd mock-backend && uv run uvicorn main:app --host 0.0.0.0 --port 8001
 
 # Start frontend development server
 dev-frontend:
@@ -96,7 +96,7 @@ dev-logs:
 	@make -j2 dev-backend-logs dev-frontend-logs
 
 dev-backend-logs:
-	cd mock-backend && uv run uvicorn main:app --host 0.0.0.0 --port 8000 2>&1 | tee ../backend.log
+	cd mock-backend && uv run uvicorn main:app --host 0.0.0.0 --port 8001 2>&1 | tee ../backend.log
 
 dev-frontend-logs:
 	bun run dev 2>&1 | tee frontend.log
