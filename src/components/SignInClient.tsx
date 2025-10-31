@@ -11,7 +11,7 @@ interface SignInClientProps {
   accessToken: string
 }
 
-export default function SignInClient({ callbackUrl, accessToken }: SignInClientProps) {
+export default function SignInClient({ accessToken }: SignInClientProps) {
   const router = useRouter()
   const siteConfig = getSiteConfig()
 
@@ -24,16 +24,19 @@ export default function SignInClient({ callbackUrl, accessToken }: SignInClientP
             try {
               const result = await signIn('token', {
                 accessToken: accessToken,
-                callbackUrl: callbackUrl,
+                redirect: false
               })
-              if (result?.error) {
+              if (!result) {
                 router.replace(siteConfig.gysPortalUrl)
-              } else {
-                router.replace("/chat")
+                return
               }
-            } catch (err) {
+              if(!result.error) {
+                router.replace('/chat')
+              } else {
+                router.replace(siteConfig.gysPortalUrl)
+              }
+            } catch {
               router.replace(siteConfig.gysPortalUrl)
-              console.error('Sign in error:', err)
             } finally {
             }
           })()
