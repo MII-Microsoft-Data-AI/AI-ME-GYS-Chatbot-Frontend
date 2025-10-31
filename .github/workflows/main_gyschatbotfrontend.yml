@@ -50,11 +50,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # - name: Install Bun
+      #   uses: oven-sh/setup-bun@v2
+
+      # - name: bun install
+      #   run: |
+      #     bun install
+      #     bun run build
+
+      # - name: Prepare artifact for deployment job
+      #   run: |
+      #     mkdir -p ./standalone
+      #     cp -R ./.next/standalone ./
+      #     cp -R ./public ./standalone/public
+      #     cp -R ./.next/static ./standalone/.next
+      #     rm -rf ./standalone/.env
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'gyschatbotfrontend'
           slot-name: 'Production'
-          package: .
+          package: './standalone'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EB67454EEA0B4614834ED2880460B6B9 }}
