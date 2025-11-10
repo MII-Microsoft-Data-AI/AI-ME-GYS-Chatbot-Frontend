@@ -1,59 +1,8 @@
 'use client'
 
+import { useCacheStore } from '@/contexts/CacheContext'
+
 const BaseAPIPath = '/api/be/v1/frontend/image';
-
-interface CachedImageSrc {
-  src: string;
-  timestamp: number;
-}
-
-const CACHE_PREFIX = 'image_cache_';
-
-/**
- * Get cached image source from localStorage
- * @param imageData - The image data identifier
- * @param expiryTime - Time limit in milliseconds (default: 1 minute = 60000ms)
- * @returns The cached image src if valid, otherwise null
- */
-const getCachedImageSrc = (imageData: string, expiryTime: number = 60000): string | null => {
-  try {
-    const cacheKey = `${CACHE_PREFIX}${imageData}`;
-    const cached = localStorage.getItem(cacheKey);
-    if (!cached) return null;
-
-    const { src, timestamp } = JSON.parse(cached) as CachedImageSrc;
-    const now = Date.now();
-
-    // Check if cache has expired
-    if (now - timestamp > expiryTime) {
-      localStorage.removeItem(cacheKey);
-      return null;
-    }
-
-    return src;
-  } catch (error) {
-    console.error('Error reading image cache:', error);
-    return null;
-  }
-};
-
-/**
- * Set image source cache in localStorage
- * @param imageData - The image data identifier
- * @param src - The image src to cache
- */
-const setCachedImageSrc = (imageData: string, src: string): void => {
-  try {
-    const cacheKey = `${CACHE_PREFIX}${imageData}`;
-    const cacheData: CachedImageSrc = {
-      src,
-      timestamp: Date.now(),
-    };
-    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-  } catch (error) {
-    console.error('Error setting image cache:', error);
-  }
-};
 
 /**
  * Get image source with caching
@@ -62,11 +11,23 @@ const setCachedImageSrc = (imageData: string, src: string): void => {
  * @returns The resolved image src
  */
 export const getImageSrc = async (imageData: string, cacheExpiryTime: number = 60000): Promise<string> => {
-  // Check cache first
-  const cachedSrc = getCachedImageSrc(imageData, cacheExpiryTime);
-  if (cachedSrc) {
-    console.log("RES (from cache)", cachedSrc);
-    return cachedSrc;
+  const cacheKey = `image_${imageData}`;
+  
+  // Try to get from cache using direct localStorage access for backward compatibility
+  // In a proper React component, use useCacheStore() hook
+  try {
+    const cached = localStorage.getItem(`app_cache_${cacheKey}`);
+    if (cached) {
+      const entry = JSON.parse(cached) as { data: string; expiry: number };
+      const now = Date.now();
+      
+      if (now < entry.expiry) {
+        console.log("RES (from cache)", entry.data);
+        return entry.data;
+      }
+    }
+  } catch (error) {
+    console.error('Error reading image cache:', error);
   }
 
   const safeURL = encodeURIComponent(imageData);
@@ -88,8 +49,60 @@ export const getImageSrc = async (imageData: string, cacheExpiryTime: number = 6
     .replace(/^"|"$/g, '')    // Remove surrounding quotes
     .trim()
   
-  // Cache the result
-  setCachedImageSrc(imageData, result);
+  // Cache the result with expiry time
+  try {
+    const expiry = Date.now() + cacheExpiryTime;
+    const cacheEntry = {
+      data: result,
+      expiry,
+    };
+    localStorage.setItem(`app_cache_${cacheKey}`, JSON.stringify(cacheEntry));
+  } catch (error) {
+    console.error('Error setting image cache:', error);
+  }
   
   return result
+}
+
+/**
+ * Hook-based version of getImageSrc for use in React components
+ */
+export function useGetImageSrc() {
+  const cache = useCacheStore();
+  
+  return async (imageData: string, cacheExpiryTime: number = 60000): Promise<string> => {
+    const cacheKey = `image_${imageData}`;
+    
+    // Check cache first
+    const cachedSrc = cache.get<string>(cacheKey);
+    if (cachedSrc) {
+      console.log("RES (from cache)", cachedSrc);
+      return cachedSrc;
+    }
+
+    const safeURL = encodeURIComponent(imageData);
+    const finalUrl = `${BaseAPIPath}?data=${safeURL}`
+    console.log(finalUrl)
+    const response = await fetch(finalUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
+    let result = await response.text()
+    
+    // Decode HTML entities and remove parentheses/quotes
+    result = result
+      .replace(/&quot;/g, '"')  // Decode &quot;
+      .replace(/&amp;/g, '&')   // Decode &amp;
+      .replace(/^\(|\)$/g, '')  // Remove parentheses
+      .replace(/^"|"$/g, '')    // Remove surrounding quotes
+      .trim()
+    
+    // Cache the result
+    const expiry = Date.now() + cacheExpiryTime;
+    cache.set(cacheKey, expiry, result);
+    
+    return result
+  };
 }
