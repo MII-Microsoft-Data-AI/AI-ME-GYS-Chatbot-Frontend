@@ -1,13 +1,14 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { getImageSrc } from '@/lib/integration/client/image'
+import { useGetImageSrc } from '@/lib/integration/client/image'
 
 function CustomImage(props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
   // if the src no (protocol):// then we will manipulate it to hit the backend 
   const initialSrc = typeof props.src === 'string' ? props.src : ''
   const [FinalSRC, setFinalSRC] = useState<string>(initialSrc)
   const [isLoading, setLoading] = useState<boolean>(false)
+  const getImageSrc = useGetImageSrc()
   console.log(initialSrc)
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function CustomImage(props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTML
         URL.revokeObjectURL(createdObjectUrl)
       }
     }
-  }, [props.src])
+  }, [props.src, getImageSrc])
 
   if (isLoading && !FinalSRC) {
   return <></>
