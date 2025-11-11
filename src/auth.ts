@@ -48,7 +48,6 @@ export const authOptions: NextAuthOptions = {
 
           if (response.ok) {
             const resData = await response.json() as AuthResponse
-            console.log('Authentication successful:', resData)
             return {
               id: resData.data.user.users_id,
               email: resData.data.user.users_email,

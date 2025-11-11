@@ -65,13 +65,11 @@ export const getImageSrc = async (imageData: string, cacheExpiryTime: number = 6
   // Check cache first
   const cachedSrc = getCachedImageSrc(imageData, cacheExpiryTime);
   if (cachedSrc) {
-    console.log("RES (from cache)", cachedSrc);
     return cachedSrc;
   }
 
   const safeURL = encodeURIComponent(imageData);
   const finalUrl = `${BaseAPIPath}?data=${safeURL}`
-  console.log(finalUrl)
   const response = await fetch(finalUrl, {
     method: 'GET',
     headers: {

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import Providers from "@/components/Providers"
+import { CacheHousekeeping } from "@/components/CacheWorkerInitializer"
 import { getSiteConfig } from "@/lib/site-config"
 
 const geistSans = Geist({
@@ -87,6 +88,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <CacheHousekeeping />
         <Providers>
           {children}
         </Providers>

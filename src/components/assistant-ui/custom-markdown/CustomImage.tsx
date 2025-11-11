@@ -8,7 +8,6 @@ function CustomImage(props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTML
   const initialSrc = typeof props.src === 'string' ? props.src : ''
   const [FinalSRC, setFinalSRC] = useState<string>(initialSrc)
   const [isLoading, setLoading] = useState<boolean>(false)
-  console.log(initialSrc)
 
   useEffect(() => {
     let createdObjectUrl: string | null = null
