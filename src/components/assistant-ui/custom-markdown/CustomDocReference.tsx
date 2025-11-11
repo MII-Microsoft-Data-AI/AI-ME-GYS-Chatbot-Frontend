@@ -9,7 +9,7 @@ import { Download, FileTextIcon } from "lucide-react";
 import { type FC, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChunkData, useGetDocChunkData } from "@/lib/integration/client/chunk";
+import { ChunkData, getDocChunkData } from "@/lib/integration/client/chunk";
 import { useAssistantState } from "@assistant-ui/react";
 
 // Props for the doc placeholder component
@@ -33,7 +33,6 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isRunning = useAssistantState(({ thread }) => thread.isRunning); // boolean
-  const getDocChunkData = useGetDocChunkData();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +54,7 @@ export const CustomDocReference: FC<CustomDocReferenceProps> = ({
     };
 
     if (!isRunning) fetchData();
-  }, [id, type, isRunning, getDocChunkData]);
+  }, [id, type, isRunning]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
