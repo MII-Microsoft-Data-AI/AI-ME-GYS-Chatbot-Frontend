@@ -2,5 +2,7 @@
   "appService.zipIgnorePattern": [
     "node_modules{,/**}",
     ".vscode{,/**}"
-  ]
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/50f1179e-3f40-4f00-8caa-0aefaf7111b6/resourceGroups/rg_gys_openai_phase2/providers/Microsoft.Web/sites/gyschatbot-frontend-production",
+  "appService.deploySubpath": "."
 }
