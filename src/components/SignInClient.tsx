@@ -17,7 +17,8 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
 
   useEffect(() => {
     const loginTimeout = setTimeout(() => {
-      const fallbackUrl = process.env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/"
+      const env = process.env
+      const fallbackUrl = env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/"
 
       if (accessToken) {
           // Auto sign in with token from query parameter
