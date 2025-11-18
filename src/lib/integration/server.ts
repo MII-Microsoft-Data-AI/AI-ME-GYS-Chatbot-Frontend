@@ -44,3 +44,11 @@ export async function getBackendAuthHeaders(additionalHeaders: Record<string, st
 export async function getBackendUrl(): Promise<string> {
   return process.env.BACKEND_URL || 'http://localhost:8000'
 }
+
+/**
+ * Get the GYS Portal URL for fallback redirection
+ * @returns URL string
+ */
+export async function getGYSPortalUrl(): Promise<string> {
+  return process.env.NEXT_PUBLIC_GYS_PORTAL_URL || 'http://localhost:3000'
+}

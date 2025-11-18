@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Logo from "@/components/Logo"
 import { getSiteConfig } from "@/lib/site-config"
+import { getGYSPortalUrl } from "@/lib/integration/server"
 
 interface SignInClientProps {
   callbackUrl: string
@@ -15,37 +16,46 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
   const router = useRouter()
   const siteConfig = getSiteConfig()
 
+  const authTokenSignIn = async (accessToken: string) => {
+
+    if (accessToken) {
+      // Auto sign in with token from query parameter
+      ; (async () => {
+        try {
+          const fallbackUrl = await getGYSPortalUrl()
+
+          const result = await signIn('token', {
+            accessToken: accessToken,
+            redirect: false
+          })
+
+          // Fail safe redirect to GYS Portal if sign in fails
+          if (!result) {
+            router.replace(fallbackUrl)
+            return
+          }
+
+          // Redirect to chat if successful
+          if (!result.error) {
+            router.replace(fallbackUrl)
+            return
+          } 
+
+          // Successful sign in
+          router.replace('/chat')
+        } catch {
+          // On error, redirect to GYS Portal
+          router.back()
+        }
+      })()
+    } else {
+      router.back()
+    }
+  }
+
   useEffect(() => {
     const loginTimeout = setTimeout(() => {
-      const env = process.env
-      const fallbackUrl = env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/"
-
-      if (accessToken) {
-          // Auto sign in with token from query parameter
-          ; (async () => {
-
-            try {
-              const result = await signIn('token', {
-                accessToken: accessToken,
-                redirect: false
-              })
-              if (!result) {
-                router.replace(fallbackUrl)
-                return
-              }
-              if(!result.error) {
-                router.replace('/chat')
-              } else {
-                router.replace(fallbackUrl)
-              }
-            } catch {
-              router.replace(fallbackUrl)
-            } finally {
-            }
-          })()
-      } else {
-        router.replace(fallbackUrl)
-      }
+      authTokenSignIn(accessToken)
     }, 1000)
 
     return () => clearTimeout(loginTimeout)
@@ -62,7 +72,7 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
             Welcome to {siteConfig.title}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-              Please wait while we checking your access
+            Please wait while we checking your access
           </p>
         </div>
       </div>
