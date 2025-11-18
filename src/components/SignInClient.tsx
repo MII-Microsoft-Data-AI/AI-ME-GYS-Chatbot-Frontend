@@ -17,6 +17,8 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
 
   useEffect(() => {
     const loginTimeout = setTimeout(() => {
+      const fallbackUrl = process.env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/"
+
       if (accessToken) {
           // Auto sign in with token from query parameter
           ; (async () => {
@@ -27,21 +29,21 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
                 redirect: false
               })
               if (!result) {
-                router.replace(siteConfig.gysPortalUrl)
+                router.replace(fallbackUrl)
                 return
               }
               if(!result.error) {
                 router.replace('/chat')
               } else {
-                router.replace(siteConfig.gysPortalUrl)
+                router.replace(fallbackUrl)
               }
             } catch {
-              router.replace(siteConfig.gysPortalUrl)
+              router.replace(fallbackUrl)
             } finally {
             }
           })()
       } else {
-        router.replace(siteConfig.gysPortalUrl)
+        router.replace(fallbackUrl)
       }
     }, 1000)
 
