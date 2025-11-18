@@ -1,6 +1,5 @@
 // Site configuration settings
 export interface SiteConfig {
-  gysPortalUrl: string
   name: string
   title: string
   description: string
@@ -51,7 +50,6 @@ export interface NavigationItem {
 
 // Default configuration - Customize these values to change your site branding
 export const siteConfig: SiteConfig = {
-  gysPortalUrl: process.env.NEXT_PUBLIC_GYS_PORTAL_URL || "https://dev-management.gyssteel.com/",
   name: "GYS Chat",
   title: "GYS Chat",
   description: "Garuda Yamato Steel - An AI powered chat assistant",
