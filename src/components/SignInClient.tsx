@@ -16,48 +16,38 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
   const router = useRouter()
   const siteConfig = getSiteConfig()
 
+  const redirectToGYSPortal = async () => {
+    const fallbackUrl = await getGYSPortalUrl()
+    router.replace(fallbackUrl)
+  }
+
   const authTokenSignIn = async (accessToken: string) => {
+    try {
+      const result = await signIn('token', {
+        accessToken: accessToken,
+        redirect: false
+      })
 
-    if (accessToken) {
-      // Auto sign in with token from query parameter
-      ; (async () => {
-        try {
-          const fallbackUrl = await getGYSPortalUrl()
+      // Fail safe redirect to GYS Portal if sign in fails
+      if (!result || !result.ok) {
+        redirectToGYSPortal()
+        return
+      }
 
-          const result = await signIn('token', {
-            accessToken: accessToken,
-            redirect: false
-          })
-
-          // Fail safe redirect to GYS Portal if sign in fails
-          if (!result) {
-            router.replace(fallbackUrl)
-            return
-          }
-
-          // Redirect to chat if successful
-          if (!result.error) {
-            router.replace(fallbackUrl)
-            return
-          } 
-
-          // Successful sign in
-          router.replace('/chat')
-        } catch {
-          // On error, redirect to GYS Portal
-          router.back()
-        }
-      })()
-    } else {
-      router.back()
+      // Successful sign in
+      router.replace('/chat')
+    } catch {
+      redirectToGYSPortal() 
     }
   }
 
+
   useEffect(() => {
     const loginTimeout = setTimeout(() => {
-      authTokenSignIn(accessToken)
+      if (!accessToken) {
+        authTokenSignIn(accessToken)
+      }
     }, 1000)
-
     return () => clearTimeout(loginTimeout)
   }, [accessToken])
 
