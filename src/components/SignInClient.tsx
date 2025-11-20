@@ -44,7 +44,7 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
 
   useEffect(() => {
     const loginTimeout = setTimeout(() => {
-      if (!accessToken) {
+      if (accessToken) {
         authTokenSignIn(accessToken)
       }
     }, 1000)

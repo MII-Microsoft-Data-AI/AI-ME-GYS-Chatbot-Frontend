@@ -50,6 +50,5 @@ export async function getBackendUrl(): Promise<string> {
  * @returns URL string
  */
 export async function getGYSPortalUrl(): Promise<string> {
-  console.log("Hello")
   return process.env.NEXT_PUBLIC_GYS_PORTAL_URL || 'http://localhost:3000'
 }
