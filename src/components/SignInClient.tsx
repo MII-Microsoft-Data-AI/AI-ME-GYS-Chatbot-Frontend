@@ -46,6 +46,8 @@ export default function SignInClient({ accessToken }: SignInClientProps) {
     const loginTimeout = setTimeout(() => {
       if (accessToken) {
         authTokenSignIn(accessToken)
+      } else {
+        redirectToGYSPortal()
       }
     }, 1000)
     return () => clearTimeout(loginTimeout)
