@@ -42,11 +42,11 @@ function normalizeCustomMathTags(input: string): string {
 
 function processCustomPatterns(input: string): string {
   return input
-    // Convert [doc-(id)] to HTML that react-markdown can parse
-    .replace(/\[doc-\(([^)]+)\)\]/g, '<span class="custom-doc-placeholder" data-id="$1"></span>')
-    .replace(/\[docsum-\(([^)]+)\)\]/g, '<span class="custom-docsum-placeholder" data-id="$1"></span>')
-    // Convert [link-(url)] to HTML that react-markdown can parse  
-    .replace(/\[link-\(([^)]+)\)\]/g, '<span class="custom-link-placeholder" data-url="$1"></span>');
+    // Convert [doc-(id)] and [doc-id] to HTML that react-markdown can parse
+    .replace(/\[doc-(?:\()?([^)\]]+)(?:\))?\]/g, '<span class="custom-doc-placeholder" data-id="$1"></span>')
+    .replace(/\[docsum-(?:\()?([^)\]]+)(?:\))?\]/g, '<span class="custom-docsum-placeholder" data-id="$1"></span>')
+    // Convert [link-(url)] and [link-url] to HTML that react-markdown can parse  
+    .replace(/\[link-(?:\()?([^)\]]+)(?:\))?\]/g, '<span class="custom-link-placeholder" data-url="$1"></span>');
 }
 
 function combinePreprocessors(input: string): string {
